@@ -5,7 +5,7 @@
 
 #include "integer.hpp"
 
-const size_t VECTOR_SIZE = 4096;
+const size_t VECTOR_SIZE = 4096 * 2;
 
 template <class T>
 void StupidBubbleSort(std::vector<T>& v) {
@@ -31,17 +31,17 @@ int main() {
 
     std::vector<Integer<int>> test_vector_copy(test_vector);
 
-    std::cout << "Generated vector size: " << VECTOR_SIZE << '\n';
+    std::cout << "Generated vector size: " << VECTOR_SIZE << '\n' << '\n';
 
-    comp_count = 0;
+    Integer<int>::comp_count = 0;
     std::cout << "Testing StupidBubbleSort...\n";
     StupidBubbleSort(test_vector);
-    std::cout << "StupidBubbleSort comparisons: " << comp_count << '\n';
+    std::cout << "StupidBubbleSort comparisons: " << Integer<int>::comp_count << '\n' << '\n';
 
-    comp_count = 0;
+    Integer<int>::comp_count = 0;
     std::cout << "Testing STL sort...\n";
     std::sort(test_vector_copy.begin(), test_vector_copy.end());
-    std::cout << "STL sort comparisons: " << comp_count << '\n';
+    std::cout << "STL sort comparisons: " << Integer<int>::comp_count << '\n';
 
     return 0;
 }

@@ -1,7 +1,5 @@
 #include <cstdlib>
 
-size_t comp_count = 0;
-
 template <typename IntType>
 class Integer {
     public:
@@ -59,6 +57,8 @@ class Integer {
 
         template <typename IntType_>
         friend bool operator>=(const Integer<IntType_>& lhs, const Integer<IntType_>& rhs);
+
+        static size_t comp_count;
 
     private:
         IntType integer;
@@ -189,33 +189,36 @@ const Integer<IntType> operator/(const Integer<IntType>& lhs, const Integer<IntT
 // Binary comparison operators ================================================
 template <typename IntType>
 bool operator==(const Integer<IntType>& lhs, const Integer<IntType>& rhs) {
-    ++comp_count;
+    ++Integer<IntType>::comp_count;
     return lhs.integer == rhs.integer;
 }
 
 template <typename IntType>
 bool operator!=(const Integer<IntType>& lhs, const Integer<IntType>& rhs) {
-    ++comp_count;
+    ++Integer<IntType>::comp_count;
     return lhs.integer != rhs.integer;
 }
 template <typename IntType>
 bool operator<(const Integer<IntType>& lhs, const Integer<IntType>& rhs) {
-    ++comp_count;
+    ++Integer<IntType>::comp_count;
     return lhs.integer < rhs.integer;
 }
 template <typename IntType>
 bool operator>(const Integer<IntType>& lhs, const Integer<IntType>& rhs) {
-    ++comp_count;
+    ++Integer<IntType>::comp_count;
     return lhs.integer > rhs.integer;
 }
 template <typename IntType>
 bool operator<=(const Integer<IntType>& lhs, const Integer<IntType>& rhs) {
-    ++comp_count;
+    ++Integer<IntType>::comp_count;
     return lhs.integer <= rhs.integer;
 }
 template <typename IntType>
 bool operator>=(const Integer<IntType>& lhs, const Integer<IntType>& rhs) {
-    ++comp_count;
+    ++Integer<IntType>::comp_count;
     return lhs.integer >= rhs.integer;
 }
 // ============================================================================
+
+template<typename IntType>
+size_t Integer<IntType>::comp_count;
