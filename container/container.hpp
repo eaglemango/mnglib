@@ -27,6 +27,9 @@ class Container {
         void Set(size_t element_index, const T& value);
         const T& Get(size_t element_index) const;
 
+        void PushBack(const T& value);
+        void PopBack();
+
         // Container information
         size_t Size() const;
         bool Empty() const;
@@ -113,6 +116,37 @@ template <typename T>
 const T& Container<T>::Get(size_t element_index) const {
     return operator[](element_index);
 }
+
+template <typename T>
+void Container<T>::PushBack(const T& value) {
+    assert(elements_count < CONTAINER_BLOCK_SIZE * blocks.size());
+
+    size_t block_index = elements_count / CONTAINER_BLOCK_SIZE;
+
+    blocks[block_index][last_block_offset] = value;
+    last_block_offset = (last_block_offset + 1) % CONTAINER_BLOCK_SIZE;
+
+    ++elements_count;
+
+    if (block_index == blocks.size() - 1 && last_block_offset == 0) {
+        CreateBlock();
+    } 
+}
+
+template <typename T>
+void Container<T>::PopBack() {
+    assert(elements_count);
+
+    size_t block_index = elements_count / CONTAINER_BLOCK_SIZE;
+
+    last_block_offset = (last_block_offset + CONTAINER_BLOCK_SIZE - 1) % CONTAINER_BLOCK_SIZE;
+
+    if (block_index == blocks.size() - 1 && last_block_offset == CONTAINER_BLOCK_SIZE - 1) {
+        DeleteBlock(blocks.size() - 1);
+    }
+
+    --elements_count;
+}
 // ============================================================================
 
 // Container information ======================================================
@@ -148,6 +182,7 @@ void Container<T>::DeleteBlock(size_t block_index) {
         elements_count -= CONTAINER_BLOCK_SIZE;
     }
 
+    delete blocks[block_index];
     blocks.erase(block_index);
 }
 // ============================================================================
