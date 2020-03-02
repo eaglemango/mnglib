@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include <cstdlib>
 #include <vector>
 
 #include "integer.hpp"
@@ -9,8 +10,8 @@ const size_t VECTOR_SIZE = 4096 * 2;
 
 template <class T>
 void StupidBubbleSort(std::vector<T>& v) {
-    for (size_t i = 0; i < v.size(); ++i) {
-        for (size_t j = 0; j + 1 < v.size(); ++j) {
+    for (Integer<size_t> i = 0; i < v.size(); ++i) {
+        for (Integer<size_t> j = 0; j + 1 < v.size(); ++j) {
             if (v[j] > v[j + 1]) {
                 std::swap(v[j], v[j + 1]);
             }
