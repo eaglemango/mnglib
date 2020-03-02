@@ -49,6 +49,7 @@ class Container {
 template <typename T>
 Container<T>::Container() {
     elements_count = 0;
+    last_block_offset = 0;
 }
 
 template <typename T>
@@ -60,6 +61,7 @@ Container<T>::Container(size_t blocks_count) {
     }
 
     elements_count = 0;
+    last_block_offset = 0;
 }
 // ============================================================================
 
