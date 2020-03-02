@@ -137,14 +137,14 @@ template <typename IntType>
 Integer<IntType>& Integer<IntType>::operator++() {
     ++integer;
 
-    return this;
+    return *this;
 }
 
 template <typename IntType>
 Integer<IntType>& Integer<IntType>::operator--() {
     --integer;
 
-    return this;
+    return *this;
 }
 
 template <typename IntType>
