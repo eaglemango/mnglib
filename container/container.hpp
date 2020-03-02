@@ -101,22 +101,32 @@ Container<T>& Container<T>::operator=(Container<T>&& other_container) noexcept {
 // Data interaction ===========================================================
 template <typename T>
 T& Container<T>::operator[](size_t element_index) {
+    assert(element_index < elements_count);
+
     size_t block_index = element_index / CONTAINER_BLOCK_SIZE;
     size_t element_offset = element_index % CONTAINER_BLOCK_SIZE;
-
-    assert(element_index < elements_count);
 
     return blocks[block_index][element_offset];
 }
 
 template <typename T>
 void Container<T>::Set(size_t element_index, const T& value) {
-    operator[](element_index) = value;
+    assert(element_index < elements_count);
+
+    size_t block_index = element_index / CONTAINER_BLOCK_SIZE;
+    size_t element_offset = element_index % CONTAINER_BLOCK_SIZE;
+
+    blocks[block_index][element_offset] = value;
 }
 
 template <typename T>
 const T& Container<T>::Get(size_t element_index) const {
-    return operator[](element_index);
+    assert(element_index < elements_count);
+
+    size_t block_index = element_index / CONTAINER_BLOCK_SIZE;
+    size_t element_offset = element_index % CONTAINER_BLOCK_SIZE;
+
+    return blocks[block_index][element_offset];
 }
 
 template <typename T>
