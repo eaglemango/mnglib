@@ -90,6 +90,7 @@ size_t Hashtable::GetMaxSize() const {
 }
 
 void Hashtable::Grow() {
+    current_size_ = 0;
     max_size_ <<= 1u;
 
     std::vector<Node*> old_chain_ = main_chain_;
