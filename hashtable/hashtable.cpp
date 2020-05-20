@@ -21,16 +21,17 @@ Hashtable::Hashtable(size_t initial_max_size) : current_size_(0), max_size_(init
     main_chain_.resize(max_size_);
 }
 
-void Hashtable::Insert(const std::string_view& data) {
+void Hashtable::Insert(const std::string_view& key, int value) {
     if (current_size_ == max_size_) {
         Grow();
     }
 
-    size_t hash = StringHash(data, DEFAULT_KEY) % max_size_;
+    size_t hash = StringHash(key, DEFAULT_KEY) % max_size_;
 
     if (main_chain_[hash] == nullptr) {
         main_chain_[hash] = new Node();
-        main_chain_[hash]->data_ = data;
+        main_chain_[hash]->key_ = key;
+        main_chain_[hash]->value_ = value;
     } else {
         Node* curr_node = main_chain_[hash];
         while (curr_node->next_ != nullptr) {
@@ -38,19 +39,20 @@ void Hashtable::Insert(const std::string_view& data) {
         }
 
         curr_node->next_ = new Node();
-        curr_node->next_->data_ = data;
+        curr_node->next_->key_ = key;
+        curr_node->next_->value_ = value;
     }
 
     ++current_size_;
 }
 
-void Hashtable::Remove(const std::string_view& data) {
-    size_t hash = StringHash(data, DEFAULT_KEY) % max_size_;
+void Hashtable::Remove(const std::string_view& key) {
+    size_t hash = StringHash(key, DEFAULT_KEY) % max_size_;
 
     Node* prev_node = nullptr;
     Node* curr_node = main_chain_[hash];
     while (curr_node != nullptr) {
-        if (curr_node->data_ == data) {
+        if (curr_node->key_ == key) {
             if (prev_node != nullptr) {
                 prev_node->next_ = curr_node->next_;
             } else {
@@ -67,18 +69,32 @@ void Hashtable::Remove(const std::string_view& data) {
     }
 }
 
-bool Hashtable::Find(const std::string_view& data) const {
-    size_t hash = StringHash(data, DEFAULT_KEY) % max_size_;
+bool Hashtable::Find(const std::string_view& key) const {
+    size_t hash = StringHash(key, DEFAULT_KEY) % max_size_;
 
     Node* curr_node = main_chain_[hash];
     while (curr_node != nullptr) {
-        if (curr_node->data_ == data) {
+        if (curr_node->key_ == key) {
             return true;
         }
         curr_node = curr_node->next_;
     }
 
     return false;
+}
+
+int Hashtable::Get(const std::string_view& key) const {
+    size_t hash = StringHash(key, DEFAULT_KEY) % max_size_;
+
+    Node* curr_node = main_chain_[hash];
+    while (curr_node != nullptr) {
+        if (curr_node->key_ == key) {
+            return curr_node->value_;
+        }
+        curr_node = curr_node->next_;
+    }
+
+    return -1;
 }
 
 size_t Hashtable::GetCurrSize() const {
@@ -100,7 +116,7 @@ void Hashtable::Grow() {
 
     for (Node* curr_node : old_chain_) {
         while (curr_node != nullptr) {
-            Insert(curr_node->data_);
+            Insert(curr_node->key_, curr_node->value_);
 
             Node* old_node = curr_node;
             curr_node = curr_node->next_;
