@@ -10,10 +10,11 @@ size_t StringHash(const std::string_view& string, size_t key);
 class Node {
 public:
     Node();
+    Node(const std::string_view& key, int value);
 
     Node* next_;
     std::string_view key_;
-    int value_;
+    int value_{};
 };
 
 class Hashtable {
@@ -30,6 +31,8 @@ public:
 
 private:
     void Grow();
+    bool IsEqual(const std::string_view& lhs, const std::string_view& rhs) const;
+    void Insert(Node* new_node);
 
     std::vector<Node*> main_chain_;
 
